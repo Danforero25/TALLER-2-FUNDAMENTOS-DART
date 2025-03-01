@@ -1,4 +1,5 @@
-/*1Stream<int> fibonacciStream(int n) async* {
+1)	Generación de secuencia de Fibonacci con interacción del usuario
+Stream<int> fibonacciStream(int n) async* {
   int a = 0, b = 1;
   while (n-- > 0) {
     yield a;
@@ -23,9 +24,9 @@ void main() {
       subscription.cancel();
     }
   });
-}*/
-
-/*2mixin Electrico {
+}
+2)	Combinación de clases 
+mixin Electrico {
   void cargarBateria() {
     print('Cargando la batería...');
   }
@@ -102,9 +103,11 @@ void main() {
   dron.usarElectrico();
   dron.volar();
   dron.aterrizar();
-}*/
+}
 
-/*3 import 'dart:io';
+3)	 Lectura de archivo de texto utilizando isoteles 
+
+ import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
 
@@ -236,9 +239,11 @@ void main() async {
 
   print("Paralelo - Tiempo: ${stopwatchPar.elapsedMilliseconds} ms");
   print("Paralelo - Palabra más larga: ${resultPar["longestWord"]}");
-}*/
+}
 
-/*4class BinarySearchTree<T extends Comparable<T>> {
+4) recorrido árbol binario 
+
+class BinarySearchTree<T extends Comparable<T>> {
   TreeNode<T>? _root;
 
   void insert(T value) => _root = _insert(_root, value);
@@ -401,7 +406,9 @@ void main() {
   for (var value in bst.iterator) {
     print(value);
   }
-}*/
+}
+
+5) manejo de exepciones
 
 abstract class EcommerceException implements Exception {
   final String message;
