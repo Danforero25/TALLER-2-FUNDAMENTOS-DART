@@ -559,3 +559,68 @@ void main() {
   service.placeOrder("test@example.com", []);
   service.placeOrder("test@example.com", ["product3"]);
 }
+
+6) serialisaacion de json y deserializacion
+import 'dart:mirrors';
+import 'dart:convert';
+
+/// Clase abstracta que define la funcionalidad de serialización y deserialización.
+/// Las clases que deseen ser serializables deben extender de JsonSerializable.
+abstract class JsonSerializable {
+  /// Serializa la instancia a un mapa (Map<String, dynamic>)
+  Map<String, dynamic> toJson() {
+    final instanceMirror = reflect(this);
+    final classMirror = instanceMirror.type;
+    final Map<String, dynamic> json = {};
+
+    classMirror.declarations.forEach((symbol, declaration) {
+      // Se consideran solo las variables de instancia no estáticas.
+      if (declaration is VariableMirror && !declaration.isStatic) {
+        final fieldName = MirrorSystem.getName(symbol);
+        final fieldValue = instanceMirror.getField(symbol).reflectee;
+        json[fieldName] = fieldValue;
+      }
+    });
+    return json;
+  }
+
+
+  static T fromJson<T>(Map<String, dynamic> json, T instance) {
+    final instanceMirror = reflect(instance);
+    final classMirror = instanceMirror.type;
+
+    json.forEach((key, value) {
+      final symbol = Symbol(key);
+      if (classMirror.declarations.containsKey(symbol)) {
+        instanceMirror.setField(symbol, value);
+      }
+    });
+    return instance;
+  }
+}
+
+
+class Persona extends JsonSerializable {
+  String nombre;
+  int edad;
+
+
+  Persona({required this.nombre, required this.edad});
+
+  @override
+  String toString() => 'Persona(nombre: $nombre, edad: $edad)';
+}
+
+void main() {
+  // Se crea una instancia de Persona y se serializa a JSON.
+  Persona persona = Persona(nombre: 'pedro', edad: 40);
+  Map<String, dynamic> jsonMap = persona.toJson();
+  String jsonString = jsonEncode(jsonMap);
+  print('Serializado: $jsonString');
+
+  // Se deserializa el JSON a una nueva instancia de Persona.
+  Map<String, dynamic> parsedJson = jsonDecode(jsonString);
+  Persona persona2 = Persona(nombre: '', edad: 0);
+  persona2 = JsonSerializable.fromJson(parsedJson, persona2);
+  print('Deserializado: $persona2');
+}
