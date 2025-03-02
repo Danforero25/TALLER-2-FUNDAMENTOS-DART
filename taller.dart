@@ -560,7 +560,7 @@ void main() {
   service.placeOrder("test@example.com", ["product3"]);
 }
 
-6) serialisaacion de json y deserializacion
+6) serialisacion de json y deserializacion
 import 'dart:mirrors';
 import 'dart:convert';
 
